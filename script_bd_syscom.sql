@@ -10,6 +10,9 @@ USE api_syscom;
 -- Ver las tablas de BD
 SHOW TABLES;
 
+-- Describiendo la tabla
+/* DESCRIBE nombre_tabla; */
+
 -- Eliminar una tabla
 DROP TABLE subcategorias;
 
