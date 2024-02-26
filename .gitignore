@@ -1,0 +1,5 @@
+#Ignora archivo excel
+.xlsx
+
+#Ignora archovos .SQL
+.SQL
