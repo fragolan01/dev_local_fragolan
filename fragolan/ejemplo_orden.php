@@ -1,4 +1,7 @@
 <?php
+// Fecha
+$fecha = new DateTime();
+
 // Ruta del archivo .txt
 $archivo = 'lista_ids.txt';
 
@@ -72,12 +75,15 @@ if ($manejador) {
                     echo "PRODUCTO-ID: ".$data['producto_id']."<br>";
                     echo "STOCK: ".$data['total_existencia']."<br>";
 
+
                     // ***PRECIO
                     if (isset($precio_descuento)) {
                         echo "PRECIO: " . $precio_descuento . "<br>";
                     }
-                    // Aquí puedes seguir procesando los datos según tus necesidades
+                    // mas datos
+                    echo $fecha->format('U = Y-m-d H:i:s');
                     echo "<br>";
+
                 }
             }
 
