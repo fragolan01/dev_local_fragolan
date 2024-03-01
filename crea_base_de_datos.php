@@ -4,7 +4,7 @@
 $servername = "localhost"; // Servidor local
 $username = "root"; // usurio root
 $password = ""; // password mysql
-$database = "fragcom_develop"; // base de datos
+$database = "fragcom_syscom"; // base de datos
 
 // Conexión a la base de datos
 $conn = new mysqli($servername, $username, $password, $database);

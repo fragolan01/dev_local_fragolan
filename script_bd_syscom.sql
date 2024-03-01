@@ -2,7 +2,9 @@
 -- mysql -u root -p
 
 -- Creacion base de datos
-CREATE DATABASE api_syscom;
+CREATE DATABASE fragcom_syscom;
+CREATE DATABASE fragcom_develop;
+
 
 -- Acceder a base de datos
 USE api_syscom;

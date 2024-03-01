@@ -12,11 +12,17 @@ if ($v7=="despliega") {
     echo "<b>CONSULTA BASE DE DATOS :</b>";
     echo "<br><br>";
 
-
+/*
     $servername = "localhost"; // Servidor de base de datos
     $username = "fragcom_syscom"; // Usuario de MySQL
     $password = "S15t3ma5@Fr4g0l4N"; // Contraseña de MySQL
     $database = "fragcom_syscom"; // base de datos
+*/
+
+    $servername = "localhost"; // Servidor de base de datos
+    $username = "root"; // Usuario de MySQL
+    $password = ""; // Contraseña de MySQL
+    $database = "api_syscom"; // base de datos
 
 
   
@@ -44,7 +50,7 @@ if ($v7=="despliega") {
         echo "La base de datos no tiene tablas.";
     }
  
-      
+ /*     
     // Consulta para eliminar una tabla
     $tabla = 'plataforma_ventas_productos';
     $sql = "DROP TABLE IF EXISTS $tabla";
