@@ -1,6 +1,7 @@
 <?php
 // Ruta del archivo de texto
 $ruta_archivo = 'lista_ids.txt';
+$id_dominio=9999;
 
 set_time_limit(300); // Establece el límite de tiempo a 300 segundos (5 minutos)
 
@@ -39,21 +40,21 @@ if (file_exists($ruta_archivo)) {
         } else {
             // Procesa los datos recibidos (en este ejemplo asumimos que la respuesta es en JSON)
             $data = json_decode($response, true);
-
             
-            
-            // Decodificar el JSON en un array asociativo
-            $array = json_decode($response, true);
-            $precios = $array['precios'];
-                        
-            if (is_array($precios) && array_key_exists('precio_descuento', $precios)) {
-                echo "PRECIO: " . $precios['precio_descuento'] . "<br>";
-            } else {
-                echo "No se pudo acceder al precio de descuento.<br>";
-            }
-            
+                      
         }
-        
+
+        // Decodificar el JSON en un array asociativo
+        $array = json_decode($response, true);
+        $precios = $array['precios'];
+                            
+        if (is_array($precios) && array_key_exists('precio_descuento', $precios)) {
+            // Guarda el precio_descuento para imprimirlo al final
+            $precio_descuento = $precios['precio_descuento'];
+        } else {
+            echo "No se pudo acceder al precio de descuento.<br>";
+        }
+
         // Verifica si la decodificación tuvo éxito
         if ($data === null) {
             echo 'Error al decodificar el JSON para el número $numero<br>';
@@ -61,8 +62,14 @@ if (file_exists($ruta_archivo)) {
             // Accede a los datos y muestra la información
             echo "Producto_id: ".$data['producto_id']."<br>";
             echo "Stock: ".$data['total_existencia']."<br>";
+            // Imprime el precio_descuento si está disponible
+            if (isset($precio_descuento)) {
+                echo "PRECIO: " . $precio_descuento . "<br>";
+            }
             echo "<br>";
-    }
+      
+            
+        }
 }
 } else {
     echo "El archivo no existe.";
