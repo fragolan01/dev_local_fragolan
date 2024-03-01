@@ -3,7 +3,8 @@
 $archivo = 'lista_ids.txt';
 
 // Abrir el archivo en modo lectura
-$manejador = fopen($archivo, 'r');
+ $manejador = fopen($archivo, 'r',FILE_IGNORE_NEW_LINES);
+
 
 // Establece el límite de tiempo a 300 segundos (5 minutos)
 set_time_limit(300); 
@@ -31,7 +32,9 @@ if ($manejador) {
         if (count($partes) == 2) {
             // Extraer los primeros 5 dígitos de cada número
             $orden = substr($partes[0], 0, 5);
-            $producto_id = substr($partes[1], 0, 6);
+            // $producto_id = substr($partes[1], 0, 6);
+            $producto_id = trim($partes[1]);
+
            
             // Construye la URL de la API con el producto_id actual
             $api_url = "https://developers.syscom.mx/api/v1/productos/".$producto_id;
