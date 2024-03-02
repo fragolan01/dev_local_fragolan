@@ -36,7 +36,7 @@ if (file_exists($ruta_archivo)) {
         // Verificar si la consulta fue exitosa
         if ($response === FALSE) {
             // Manejar el error si la consulta falla
-            echo "Error al consultar la API SYSCOM para el número $numero<br>";
+            echo "Error al consultar la API SYSCOM para el número $producto_id<br>";
         } else {
             // Procesa los datos recibidos (en este ejemplo asumimos que la respuesta es en JSON)
             $data = json_decode($response, true);

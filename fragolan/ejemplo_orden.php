@@ -32,11 +32,12 @@ if ($manejador) {
         $partes = explode("\t", $linea);
         
         // Verificar si hay dos partes (orden y producto_id)
-        if (count($partes) == 2) {
+        if (count($partes) == 3) {
             // Extraer los primeros 5 dígitos de cada número
             $orden = substr($partes[0], 0, 5);
             // $producto_id = substr($partes[1], 0, 6);
             $producto_id = trim($partes[1]);
+            $ìnv_minimo = trim($partes[2]);
 
            
             // Construye la URL de la API con el producto_id actual
@@ -74,15 +75,19 @@ if ($manejador) {
                     echo 'ORDEN: '.$orden,'<br>';
                     echo "PRODUCTO-ID: ".$data['producto_id']."<br>";
                     echo "STOCK: ".$data['total_existencia']."<br>";
+                    echo 'INV. MINI: '.$ìnv_minimo.'<br>';
 
 
                     // ***PRECIO
                     if (isset($precio_descuento)) {
-                        echo "PRECIO: " . $precio_descuento . "<br>";
+                        echo "PRECIO: " . $precio_descuento;
+                        echo $fecha->format('U = Y-m-d H:i:s');
+                        echo "<br>";
+
                     }
                     // mas datos
-                    echo $fecha->format('U = Y-m-d H:i:s');
                     echo "<br>";
+
 
                 }
             }
