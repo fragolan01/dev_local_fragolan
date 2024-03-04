@@ -148,7 +148,7 @@ if ($manejador) {
                     // ***PRECIO
                     if (isset($precio_descuento)) {
                         echo "PRECIO: " . $precio_descuento.'<br>';
-                        echo $fecha->format('Y-m-d H:i:s');
+                        // echo $fecha->format('Y-m-d H:i:s');
                         echo "<br>";
 
                     }
