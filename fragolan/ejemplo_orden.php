@@ -107,7 +107,23 @@ if ($manejador) {
                     echo "Error al decodificar el JSON para el producto_id $producto_id<br>";
                 } else {
                     // Accede a los datos y muestra la información
-                    echo 'ORDEN: '.$orden,'<br>';
+                    // echo 'ORDEN: '.$orden,'<br>';
+                    $producto_id=$data['producto_id'];
+                    $stock = ['total_existencia'];
+                    // echo gettype($stock);
+
+                    //Converit a integer 
+                    $int_stock = intval($data['total_existencia']);
+
+                    if($int_stock < $ìnv_minimo){
+                        echo 'PAUSA'.'<br>';
+                    }else{
+                        echo 'ACTIVO'.'<br>';
+                    }
+
+
+
+    
                     echo "PRODUCTO-ID: ".$data['producto_id']."<br>";
                     echo "STOCK: ".$data['total_existencia']."<br>";
                     echo 'INV. MINI: '.$ìnv_minimo.'<br>';
@@ -115,8 +131,8 @@ if ($manejador) {
 
                     // ***PRECIO
                     if (isset($precio_descuento)) {
-                        echo "PRECIO: " . $precio_descuento;
-                        echo $fecha->format('U = Y-m-d H:i:s');
+                        echo "PRECIO: " . $precio_descuento.'<br>';
+                        // echo $fecha->format('U = Y-m-d H:i:s');
                         echo "<br>";
 
                     }
@@ -127,9 +143,8 @@ if ($manejador) {
             }
 
             
-
         } else {
-            // Si la línea no tiene dos partes, mostrar un mensaje de error
+            // Si la línea no tiene tres partes, mostrar un mensaje de error
             echo "Error: La línea no tiene el formato esperado.\n";
         }
     }
