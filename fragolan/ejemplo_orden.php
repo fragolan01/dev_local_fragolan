@@ -17,8 +17,9 @@ if ($conn->connect_error) {
 
 
 // Fecha
-$fecha = new DateTime();
-// date_default_timezone_set('');
+date_default_timezone_set('America/Mexico_city');
+$fecha = $fecha = new DateTime();
+
 // Archivo .txt
 $archivo = 'lista_ids.txt';
 // Abrir el archivo en modo lectura
@@ -147,7 +148,7 @@ if ($manejador) {
                     // ***PRECIO
                     if (isset($precio_descuento)) {
                         echo "PRECIO: " . $precio_descuento.'<br>';
-                        $fecha->format('Y-m-d H:i:s');
+                        echo $fecha->format('Y-m-d H:i:s');
                         echo "<br>";
 
                     }
@@ -157,8 +158,8 @@ if ($manejador) {
 
 
                     //Insertando datos
-                    $sql = "INSERT INTO plataforma_ventas_temp (id_dominio, id_syscom, orden, stock, precio, inv_min, status) 
-                    VALUES ('$id_dominio', '$int_producto_id', '$int_orden', '$int_stock','$int_precio_descuento','$int_inv_minimo', '$status')";
+                    $sql = "INSERT INTO plataforma_ventas_temp (id_dominio, id_syscom, orden, fecha, stock, precio, inv_min, status) 
+                    VALUES ('$id_dominio', '$int_producto_id', '$int_orden', NOW(), '$int_stock','$int_precio_descuento','$int_inv_minimo', '$status')";
             
 
                     if ($conn->query($sql) === TRUE) {
