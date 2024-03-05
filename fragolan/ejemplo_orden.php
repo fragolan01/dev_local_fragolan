@@ -158,15 +158,15 @@ if ($manejador) {
 
 
                     //Insertando datos
-                    $sql = "INSERT INTO plataforma_ventas_temp (id_dominio, id_syscom, orden, fecha, stock, precio, inv_min, status) 
-                    VALUES ('$id_dominio', '$int_producto_id', '$int_orden', NOW(), '$int_stock','$int_precio_descuento','$int_inv_minimo', '$status')";
+                    // $sql = "INSERT INTO plataforma_ventas_temp (id_dominio, id_syscom, orden, fecha, stock, precio, inv_min, status) 
+                    // VALUES ('$id_dominio', '$int_producto_id', '$int_orden', NOW(), '$int_stock','$int_precio_descuento','$int_inv_minimo', '$status')";
             
 
-                    if ($conn->query($sql) === TRUE) {
-                            echo "\Datos insertados correctamente en la tabla.";
-                        } else {
-                            echo "Error al insertar datos: " . $conn->error;
-                        }
+                    // if ($conn->query($sql) === TRUE) {
+                    //         // echo "\Datos insertados correctamente en la tabla.";
+                    //     } else {
+                    //         echo "Error al insertar datos: " . $conn->error;
+                    //     }
                     }
 
                 }
@@ -186,4 +186,6 @@ if ($manejador) {
     // Si no se puede abrir el archivo, mostrar un mensaje de error
     echo "Error: No se pudo abrir el archivo.\n";
 }
+
+
 ?>
