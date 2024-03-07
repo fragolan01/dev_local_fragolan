@@ -15,7 +15,6 @@ if ($conn->connect_error) {
 }
 
 
-
 // Fecha
 date_default_timezone_set('America/Mexico_city');
 $fecha = $fecha = new DateTime();
@@ -98,7 +97,7 @@ if ($manejador) {
                 // Manejar el error si la consulta falla
                 echo "Error al consultar la API SYSCOM para el producto_id $producto_id<br>";
             } else {
-                // Procesa los datos recibidos (en este ejemplo asumimos que la respuesta es en JSON)
+                // Procesa los datos recibidos
                 $data = json_decode($response, true);
                 
                 // ***PRECIO
@@ -122,7 +121,7 @@ if ($manejador) {
                     // echo 'ORDEN: '.$orden,'<br>';
                     $producto_id=$data['producto_id'];
                     $stock = ['total_existencia'];
-                    // echo gettype($stock);
+                    $titulo =['titulo'];
 
                     //Converit a integer las varibales
                     $int_orden = intval($orden);
@@ -141,8 +140,10 @@ if ($manejador) {
 
     
                     echo "ID: ".$data['producto_id']."<br>";
+                    echo "PRODUCTO: ".$data['titulo'].'<br>';
                     echo "STOCK: ".$data['total_existencia']."<br>";
                     echo 'INV. MINI: '.$ìnv_minimo.'<br>';
+                    
 
 
                     // ***PRECIO
@@ -153,26 +154,30 @@ if ($manejador) {
 
                     }
 
+                    // Convertir a texto Titulo
+                    $data_text = $data['titulo'];
+
+
                     //Converit a integer las varibales
                     $int_precio_descuento = intval($precio_descuento);
 
 
-                    //Insertando datos
-                    // $sql = "INSERT INTO plataforma_ventas_temp (id_dominio, id_syscom, orden, fecha, stock, precio, inv_min, status) 
-                    // VALUES ('$id_dominio', '$int_producto_id', '$int_orden', NOW(), '$int_stock','$int_precio_descuento','$int_inv_minimo', '$status')";
+                    // Insertando datos
+                    $sql = "INSERT INTO plataforma_ventas_temp (id_dominio, id_syscom, orden, fecha, stock, precio, inv_min, status, titulo) 
+                    VALUES ('$id_dominio', '$int_producto_id', '$int_orden', NOW(), '$int_stock','$int_precio_descuento','$int_inv_minimo', '$status', '$data_text')";
             
 
-                    // if ($conn->query($sql) === TRUE) {
-                    //         // echo "\Datos insertados correctamente en la tabla.";
-                    //     } else {
-                    //         echo "Error al insertar datos: " . $conn->error;
-                    //     }
+                    if ($conn->query($sql) === TRUE) {
+                            // echo "\Datos insertados correctamente en la tabla.";
+                        } else {
+                            echo "Error al insertar datos: " . $conn->error;
+                        }
                     }
 
                 }
             
         } else {
-            // Si la línea no tiene tres partes, mostrar un mensaje de error
+        //     // Si la línea no tiene tres partes, mostrar un mensaje de error
             echo "Error: La línea no tiene el formato esperado.\n";
         }
     }

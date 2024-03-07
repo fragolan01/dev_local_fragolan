@@ -1,12 +1,12 @@
 <?php
 
-echo 'INICIA CONSULTA';
+echo 'PRODUCTOS ACTIVOS Y PAUSA';
 echo '<br>';
 echo '<br>';
 
 // require 'plataforma_ventas_temp.php';
-require 'productos.php';
+// require 'ejemplo_orden.php';
 
-// require 'id_syscom.php';
+require 'productos.php';
 
 ?>
