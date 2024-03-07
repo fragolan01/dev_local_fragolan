@@ -19,30 +19,8 @@ if ($conn->connect_error) {
 
 $sql = "SELECT status, id_syscom, titulo, stock, inv_min, fecha, orden  
         FROM plataforma_ventas_temp AS t1 WHERE t1.fecha = 
-        (SELECT MAX(t2.fecha) FROM plataforma_ventas_temp AS t2 WHERE t1.id_syscom = t2.id_syscom) ORDER BY orden";
-
-
-
-// $sql = "SELECT 
-//             CASE 
-//                 WHEN status = 1 THEN 'ACTIVO'
-//                 WHEN status = 0 THEN 'PAUSA'
-//                 ELSE 'Desconocido'
-//             END AS estado,
-//             id_syscom, 
-//             titulo, 
-//             stock, 
-//             inv_min, 
-//             fecha, 
-//             orden  
-//         FROM 
-//             plataforma_ventas_temp AS t1 
-//         WHERE 
-//             t1.fecha = (SELECT MAX(t2.fecha) FROM plataforma_ventas_temp AS t2 WHERE t1.id_syscom = t2.id_syscom) 
-//         ORDER BY 
-//             orden";
-
-
+        (SELECT MAX(t2.fecha) FROM plataforma_ventas_temp AS t2 WHERE t1.id_syscom = t2.id_syscom) 
+        ORDER BY orden";
 
 
 $result = $conn->query($sql);
@@ -71,9 +49,11 @@ if ($result->num_rows > 0) {
         // Imprimir el estado
         echo "<td>";
         if ($row['status'] == 1) {
-            echo 'ACTIVO';
+            // echo 'ACTIVO';
+            echo "<font color=green> ACTIVO</font>";
+
         } elseif ($row['status'] == 0) {
-            echo "<font color=red> PAUSA</font>";
+            echo "<b><font  color=red> PAUSA</font></b>";
 
         } else {
             echo 'Desconocido'; // Si el estado no es ni 0 ni 1
