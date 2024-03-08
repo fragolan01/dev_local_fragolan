@@ -14,6 +14,12 @@ echo '<br>';
 echo '<form action="ejemplo_orden.php" method="post">';
         echo '<input type="submit" name="consulta_btn" value="Inserta ">';
 echo '</form>';
+echo '<br>';
+
+echo '<form action="consulta_familias.php" method="post">';
+        echo '<input type="submit" name="consulta_btn" value="Consulta API por Familia ">';
+echo '</form>';
+
 
 
 ?>
