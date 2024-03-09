@@ -7,15 +7,13 @@ $archivo = 'lista_ids.txt';
 $manejador = fopen($archivo, 'r');
 
 // Establecer el límite de tiempo a 25 minutos
-set_time_limit(1500);
+set_time_limit(240);
 
 // Inicializar el contador en 1
 $cont = 1;
 
 // Definir la frecuencia de serie en segundos (2.5 minuto)
-$frecuencia_serie = 150;
-
-
+$frecuencia_serie = 30;
 
 
 // Token de autenticación
@@ -31,7 +29,6 @@ $options = array(
 $context = stream_context_create($options);
 
 
-
 // Verificar si el archivo se abrió correctamente
 if ($manejador) {
 
@@ -45,14 +42,11 @@ if ($manejador) {
         if (count($partes) == 3) {
             // Extraer los primeros 5 dígitos de cada número
             $orden = substr($partes[0], 0, 5);
-            $producto_id = trim($partes[1]);
-            
-
-            
+            $producto_id = trim($partes[1]);            
+          
             // Verificar si la serie coincide con el contador actual
             if ($orden[0] == $cont) {
 
-                // echo date('h:i:s -> ') . $orden . "<br>";
 
                 // Construye la URL de la API con el producto_id actual
                 $api_url = "https://developers.syscom.mx/api/v1/productos/".$producto_id;
@@ -68,18 +62,6 @@ if ($manejador) {
                     // Procesa los datos recibidos
                     $data = json_decode($response, true);
 
-                    // ***PRECIO
-                    // $array = json_decode($response, true);
-                    // $precios = $array['precios']; 
-
-                    // ***PRECIO
-                    // if (is_array($precios) && array_key_exists('precio_descuento', $precios)) {
-                    //     // Guarda el precio_descuento para imprimirlo al final
-                    //     $precio_descuento = $precios['precio_descuento'];
-                    // } else {
-                    //     echo "No se pudo acceder al precio de descuento.<br>";
-                    // }
-
                      // Verifica si la decodificación tuvo éxito
                      if ($data === null) {
                         echo "Error al decodificar el JSON para el producto_id $producto_id<br>";
@@ -89,21 +71,18 @@ if ($manejador) {
                 
                     }
 
-                    echo date('h:i:s -> ').$data['producto_id']."<br>";
-                   
+                    echo date('h:i:s -> ').$data['producto_id']."<br>";                   
 
                 }
-
-
 
             } else {
                 // Si la serie no coincide, avanzar al siguiente contador y esperar
                 $cont++;
-                sleep($frecuencia_serie);
+                // sleep($frecuencia_serie);
                 // echo date('h:i:s -> ') . $orden . "<br>";
-                echo date('h:i:s -> ').$data['producto_id']."<br>";
+                // echo date('h:i:s -> ').$data['producto_id']."<br>";
 
-            }
+             }
             
             // Reiniciar el contador si llega al 8
             if ($cont > 8) {
