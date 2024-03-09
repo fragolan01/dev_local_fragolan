@@ -1,5 +1,19 @@
 <?php
 
+$servername = "localhost"; // Servidor de base de datos
+$username = "root"; // Usuario de MySQL
+$password = ""; // Contraseña de MySQL
+$database = "fragcom_develop"; // base de datos
+// Conexión a la base de datos
+$conn = new mysqli($servername, $username, $password, $database);
+// Verifica la conexión
+if ($conn->connect_error) {
+    die("Error de conexión: " . $conn->connect_error);
+}
+
+//Dominio
+$id_dominio=9999;
+
 // Archivo .txt
 $archivo = 'lista_ids.txt';
 
@@ -105,20 +119,6 @@ if ($manejador) {
                         }
                 
                     }
-
-                    echo $data['producto_id']."<br>";
-                    echo "PRODUCTO: ".$data['titulo'].'<br>';
-                    echo "STOCK: ".$data['total_existencia']."<br>";
-                    echo 'INV. MINI: '.$ìnv_minimo.'<br>';
-
-                    // ***PRECIO
-                    if (isset($precio_descuento)) {
-                        echo "PRECIO: " . $precio_descuento.'<br>';
-                        echo $fecha->format('Y-m-d H:i:s');
-                        echo "<br>";
-
-                    }
-
                    
 
                 }                
@@ -161,10 +161,47 @@ if ($manejador) {
             if ($cont > 8) {
                 $cont = 1;
             }
+
+
+            echo $data['producto_id']."<br>";
+            echo "PRODUCTO: ".$data['titulo'].'<br>';
+            echo "STOCK: ".$data['total_existencia']."<br>";
+            echo 'INV. MINI: '.$ìnv_minimo.'<br>';
+
+            // ***PRECIO
+            if (isset($precio_descuento)) {
+                echo "PRECIO: " . $precio_descuento.'<br>';
+                echo $fecha->format('Y-m-d H:i:s');
+                echo "<br>";
+
+            }
+    
+            // Convertir Titulo a texto
+            $data_text = $data['titulo'];
+
+            //Converit a integer las varibales
+            $int_precio_descuento = intval($precio_descuento);
+
+
+            // Insertando datos
+            $sql = "INSERT INTO plataforma_ventas_temp (id_dominio, id_syscom, orden, fecha, stock, precio, inv_min, status, titulo) 
+            VALUES ('$id_dominio', '$int_producto_id', '$int_orden', NOW(), '$int_stock','$int_precio_descuento','$int_inv_minimo', '$status', '$data_text')";
+
+
+            if ($conn->query($sql) === TRUE) {
+                // echo "\Datos insertados correctamente en la tabla.";
+            } else {
+                echo "Error al insertar datos: " . $conn->error;
+            }
+
+
         }
     }
     // Cerrar el archivo
     fclose($manejador);
+    
+    // Cierra la BD
+    $conn->close();
 
 } else {
     // Si no se puede abrir el archivo, mostrar un mensaje de error
