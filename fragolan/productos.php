@@ -21,5 +21,4 @@ echo '<form action="familias.php" method="post">';
 echo '</form>';
 
 
-
 ?>
