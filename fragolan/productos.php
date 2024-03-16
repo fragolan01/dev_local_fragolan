@@ -7,18 +7,19 @@ echo '</form>';
 echo '<br>';
 
 echo '<form action="todos_los_productos.php" method="post">';
-        echo '<input type="submit" name="consulta_btn" value="Todos los Productos ">';
+        echo '<input type="submit" name="productos_btn" value="Todos los Productos ">';
 echo '</form>';
 echo '<br>';
 
 echo '<form action="ejemplo_orden.php" method="post">';
-        echo '<input type="submit" name="consulta_btn" value="Inserta ">';
+        echo '<input type="submit" name="ejemplo_btn" value="Inserta ">';
 echo '</form>';
 echo '<br>';
 
 echo '<form action="familias.php" method="post">';
-        echo '<input type="submit" name="consulta_btn" value="Consulta API por Familia ">';
+        echo '<input type="submit" name="familias_btn" value="Consulta API por Familia ">';
 echo '</form>';
+
 
 
 ?>
