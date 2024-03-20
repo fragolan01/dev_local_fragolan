@@ -26,11 +26,13 @@ $fecha = $fecha = new DateTime();
 // Establecer el límite de tiempo a 10 minutos
 set_time_limit(600);
 // Definir la frecuencia de serie en segundos (2.5 minuto)
-$frecuencia_serie = 120;
+$frecuencia_serie = 120; 
 // Dolar
 $dolar = 0.0;
 // url tipo de cambio
 $tipo_de_cambio = "https://developers.syscom.mx/api/v1/tipocambio";
+//Descuento
+$descuento = 0.04;
 
 
 // Configurar opciones para la solicitud HTTP
@@ -151,24 +153,40 @@ if ($manejador) {
     
             // Convertir Titulo a texto
             $data_text = $data['titulo'];
+
             //Converit a integer las varibales
             $float_precio_descuento = floatval($precio_descuento);
-            // echo 'EL PRECIO: ' .$int_precio_descuento.'<br>';
+          
+            // Calcula PRECIO con descuento
+            $precio_con_descuento = $float_precio_descuento - ($precio_descuento * $descuento);
+            
+            // Insertando datos en tabla plataforma_ventas_temp
+            $sql_temp = "INSERT INTO plataforma_ventas_temp (id_dominio, id_syscom, orden, fecha, stock, precio, inv_min, status, titulo) 
+                         VALUES ('$id_dominio', '$int_producto_id', '$int_orden', NOW(), '$int_stock', $precio_con_descuento, '$int_inv_minimo', '$status', '$data_text')";
 
+            if ($conn->query($sql_temp) === TRUE) {
+                // Insertar datos en la tabla plataforma_ventas_precio
+                $sql_precio  = " INSERT INTO plataforma_ventas_precio (id_dominio, fecha, precio, id_syscom) 
+                        VALUES ('$id_dominio', NOW(), $precio_con_descuento, '$int_producto_id' )";
 
-
-            // Insertando datos
-            $sql = "INSERT INTO plataforma_ventas_temp (id_dominio, id_syscom, orden, fecha, stock, precio, inv_min, status, titulo) 
-            VALUES ('$id_dominio', '$int_producto_id', '$int_orden', NOW(), '$int_stock','$float_precio_descuento','$int_inv_minimo', '$status', '$data_text')";
-
-            if ($conn->query($sql) === TRUE) {
-                // echo "\Datos insertados correctamente en la tabla.";
+                if ($conn->query($sql_precio) === TRUE) {
+                    // Si ambas inserciones fueron exitosas, realizar el commit
+                    $conn->commit();
+                    echo "Datos insertados correctamente en ambas tablas.";
+                } else {
+                    // Si falla la inserción en plataforma_ventas_precio, hacer rollback
+                    $conn->rollback();
+                    echo "Error al insertar datos en plataforma_ventas_precio: " . $conn->error;
+                }
+        
             } else {
-                echo "Error al insertar datos: " . $conn->error;
+                // Si falla la inserción en plataforma_ventas_temp, hacer rollback
+                $conn->rollback();
+                echo "Error al insertar datos en plataforma_ventas_temp: " . $conn->error;
             }
+
         
     }
-    
     // Cerrar el archivo
     fclose($manejador);
     
