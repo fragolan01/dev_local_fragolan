@@ -2,9 +2,12 @@
 ALTER TABLE plataforma_ventas_precio DROP COLUMN id_producto;
 ALTER TABLE plataforma_ventas_temp add COLUMN id_syscom int;
 ALTER TABLE plataforma_ventas_temp MODIFY COLUMN fecha timestamp;
-ALTER TABLE plataforma_ventas_precio MODIFY fecha timestamp NOT NULL ;
+ALTER TABLE plataforma_ventas_precio MODIFY fecha timestamp NOT NULL;
 ALTER TABLE plataforma_ventas_temp MODIFY COLUMN precio  DEC(10,2);
 ALTER TABLE plataforma_ventas_precio MODIFY COLUMN precio  DOUBLE;
+
+ALTER TABLE plataforma_ventas_tipo_cambio MODIFY fecha timestamp NOT NULL;
+ALTER TABLE plataforma_ventas_tipo_cambio MODIFY COLUMN normal  DEC(5,2);
 
 
 
@@ -25,8 +28,6 @@ UPDATE plataforma_ventas_temp SET precio = 26.33 WHERE id_syscom = '204626';
 INSERT INTO plataforma_ventas_temp (id_syscom, precio)
 INSERT INTO plataforma_ventas_temp (id_syscom, precio) SELECT '194827', 2905.25 FROM dual WHERE NOT EXISTS (SELECT * FROM plataforma_ventas_temp WHERE id_syscom = '194827');
 INSERT INTO plataforma_ventas_precio (id_syscom, precio) SELECT '194827', 2905.25 FROM dual WHERE NOT EXISTS (SELECT * FROM plataforma_ventas_temp WHERE id_syscom = '194827');
-
-
 
 
 $sql = "INSERT INTO plataforma_ventas_temp (id_dominio, id_syscom, orden, fecha, stock, precio, inv_min, status, titulo) 

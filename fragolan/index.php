@@ -1,12 +1,18 @@
 <?php
 
+// Muestra todos los errores excepto los de nivel de advertencia
+error_reporting(E_ALL & ~E_WARNING);
+
+// Mostrar los errores en el navegador
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+
 echo 'PRODUCTOS ACTIVOS Y PAUSA';
 echo '<br>';
 echo '<br>';
 
-// require 'plataforma_ventas_temp.php';
-// require 'ejemplo_orden.php';
-
-require 'productos.php';
+require 'menu.php';
 
 ?>

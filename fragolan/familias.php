@@ -4,6 +4,7 @@ $servername = "localhost"; // Servidor de base de datos
 $username = "root"; // Usuario de MySQL
 $password = ""; // Contraseña de MySQL
 $database = "fragcom_develop"; // base de datos
+
 // Conexión a la base de datos
 $conn = new mysqli($servername, $username, $password, $database);
 // Verifica la conexión
@@ -33,7 +34,6 @@ $dolar = 0.0;
 $tipo_de_cambio = "https://developers.syscom.mx/api/v1/tipocambio";
 //Descuento
 $descuento = 0.04;
-
 
 // Configurar opciones para la solicitud HTTP
 $options = array(
@@ -133,7 +133,6 @@ if ($manejador) {
             
                     }
                    
-
                 }                
                                   
             }
@@ -184,7 +183,6 @@ if ($manejador) {
                 $conn->rollback();
                 echo "Error al insertar datos en plataforma_ventas_temp: " . $conn->error;
             }
-
         
     }
     // Cerrar el archivo
