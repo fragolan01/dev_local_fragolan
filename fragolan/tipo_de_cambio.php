@@ -61,11 +61,11 @@ if ($response_tc === FALSE) {
     if ($conn->query($sql) === TRUE) {
         // Si la interceccion fue exitosa  
         $conn->commit();
-        echo "Datos insertados correctamente en ambas tablas.";
+        echo "Tipo de cambio insertado correctamente.";
     } else {
         // Si falla la inserción en plataforma_ventas_precio, hacer rollback
         $conn->rollback();
-        echo "Error al insertar datos en plataforma_ventas_precio: " . $conn->error;
+        echo "Error al insertar tipo de cambio plataforma_ventas_tipo_de_cambio: " . $conn->error;
     }
 
 }

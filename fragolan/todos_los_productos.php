@@ -1,17 +1,5 @@
 <?php
-// Realiza la conexión a la base de datos y demás configuraciones necesarias
-$servername = "localhost"; // Servidor de base de datos
-$username = "root"; // Usuario de MySQL
-$password = ""; // Contraseña de MySQL
-$database = "fragcom_develop"; // base de datos
-
-// Conexión a la base de datos
-$conn = new mysqli($servername, $username, $password, $database);
-
-// Verifica la conexión
-if ($conn->connect_error) {
-    die("Error de conexión: " . $conn->connect_error);
-}
+require_once('conexion.php');
 
 $sql = "SELECT status, id_syscom, titulo, stock, inv_min, fecha, precio, orden  
         FROM plataforma_ventas_temp AS t1 WHERE t1.fecha = 
@@ -24,19 +12,12 @@ $result = $conn->query($sql);
 
 // Verifica si se encontraron resultados
 if ($result->num_rows > 0) {
+    
     // Imprime los resultados en una tabla HTML
     echo "<table border='1'>
     <tr>
-    <th>STATUS</th>
-    <th>ID SYSCOM</th>
-    <th>PRODUCTO</th>
-    <th>STOCK</th>
-    <th>Inv Min</th>
-    <th>Fecha</th>
-    <th>PRECIO</th>
     </tr>";
 
-    echo "<table>";
     echo "<tr><th>Estado</th><th>ID Syscom</th><th>Título</th><th>Stock</th><th>Inventario Mínimo</th><th>Fecha</th><th>Precio</th></tr>";
     
 

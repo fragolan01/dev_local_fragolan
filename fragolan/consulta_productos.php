@@ -1,9 +1,6 @@
 <?php
-// Realiza la conexión a la base de datos y demás configuraciones necesarias
-$servername = "localhost"; // Servidor de base de datos
-$username = "root"; // Usuario de MySQL
-$password = ""; // Contraseña de MySQL
-$database = "fragcom_develop"; // base de datos
+
+require_once('conexion.php');
 
 // Conexión a la base de datos
 $conn = new mysqli($servername, $username, $password, $database);
@@ -12,6 +9,12 @@ $conn = new mysqli($servername, $username, $password, $database);
 if ($conn->connect_error) {
     die("Error de conexión: " . $conn->connect_error);
 }
+
+
+echo '<form action="index.php" method="post">';
+    echo '<input type="submit" name="consulta_btn" value="Inicio">';
+echo '</form>';
+echo '<br>';
 
 // Realiza la consulta SQL
 $sql = "SELECT id_syscom, stock, inv_min, status, fecha, orden FROM plataforma_ventas_temp AS t1 WHERE t1.fecha = (SELECT MAX(t2.fecha) FROM plataforma_ventas_temp AS t2 WHERE t1.id_syscom = t2.id_syscom) AND status = 0 ORDER BY orden";
