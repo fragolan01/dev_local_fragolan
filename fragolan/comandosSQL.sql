@@ -30,20 +30,30 @@ INSERT INTO plataforma_ventas_temp (id_syscom, precio) SELECT '194827', 2905.25 
 INSERT INTO plataforma_ventas_precio (id_syscom, precio) SELECT '194827', 2905.25 FROM dual WHERE NOT EXISTS (SELECT * FROM plataforma_ventas_temp WHERE id_syscom = '194827');
 
 
-$sql = "INSERT INTO plataforma_ventas_temp (id_dominio, id_syscom, orden, fecha, stock, precio, inv_min, status, titulo) 
-        VALUES ('$id_dominio', '$int_producto_id', '$int_orden', NOW(), '$int_stock','$float_precio_descuento','$int_inv_minimo', '$status', '$data_text')"
-        
-
-$sql = "SELECT status, id_syscom, titulo, stock, inv_min, fecha, (precio - (precio * 0.04)) AS precio_con_descuento, orden  
-        FROM plataforma_ventas_temp AS t1 WHERE t1.fecha = 
-        (SELECT MAX(t2.fecha) FROM plataforma_ventas_temp AS t2 WHERE t1.id_syscom = t2.id_syscom) 
-        ORDER BY orden";
-
-($float_precio_descuento-($precio_descuento * $descuento))
-
-
-// Calcular el descuento
-$precio_con_descuento = $float_precio_descuento - ($precio_descuento * $descuento);
-
-// Imprimir el resultado
-echo "Precio con descuento: " . $precio_con_descuento;
+/* Consulta precio actual y precio dia anterior */
+SELECT 
+    t1.status, 
+    t1.id_syscom, 
+    t1.titulo, 
+    t1.stock, 
+    t1.inv_min, 
+    t1.fecha, 
+    t1.precio AS precio_hoy, 
+    t1.orden,
+    (SELECT fecha FROM plataforma_ventas_temp WHERE id_syscom = t1.id_syscom AND fecha < t1.fecha ORDER BY fecha DESC LIMIT 1) AS fecha_anterior,
+    (SELECT precio FROM plataforma_ventas_temp WHERE id_syscom = t1.id_syscom AND fecha < t1.fecha ORDER BY fecha DESC LIMIT 1) AS precio_anterior
+FROM (
+    SELECT 
+        status, 
+        id_syscom, 
+        titulo, 
+        stock, 
+        inv_min, 
+        fecha, 
+        precio, 
+        orden,
+        ROW_NUMBER() OVER (PARTITION BY id_syscom ORDER BY fecha DESC) AS rn
+    FROM plataforma_ventas_temp
+) AS t1
+WHERE t1.rn = 1
+ORDER BY t1.orden;
