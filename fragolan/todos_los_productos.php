@@ -86,7 +86,21 @@ if ($result->num_rows > 0) {
             
             echo "<td><center>" . $row['precio_ayer'] . "</td></center>";
             echo "<td><center>" . $row['precio_hoy'] . "</td><center>";
-            echo "<td><center>" . $row['diferencia'] . "</td><center>";
+            
+            echo "<td><center>";
+
+                if ($row['diferencia'] > $row['precio_hoy']) {
+                    echo "<b><center><font color=red> (+) AUMENTO-PRECIO </font></b></center>";
+        
+                } elseif
+                 ($row['precio_hoy'] < $row['diferencia']) {
+                    echo "<b><center><font  color=geern> (-) BAJO-PRECIO </font></b></center>";
+        
+                } else {
+                    echo "<b><center><font >  SIN CAMBIOS </font></b></center>";
+                }
+            
+                "</td><center>";
 
 
         echo "</tr>";
