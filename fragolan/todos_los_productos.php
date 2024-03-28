@@ -4,28 +4,29 @@ require_once('conexion.php');
 $sql = "
 
 SELECT 
-t1.orden,
-t1.fecha,
-t1.id_syscom, 
-t1.titulo,
-t1.stock, 
-t1.inv_min, 
-t1.status, 
-t1.precio AS precio_ayer,
-IF (t1.stock <= t1.inv_min, 0, 1) AS status,
-(SELECT precio FROM plataforma_ventas_temp WHERE id_syscom = t1.id_syscom AND fecha < t1.fecha ORDER BY fecha DESC LIMIT 1) AS precio_hoy
+    t1.orden,
+    t1.fecha,
+    t1.id_syscom, 
+    t1.titulo,
+    t1.stock, 
+    t1.inv_min, 
+    t1.status, 
+    t1.precio AS precio_ayer,
+    IF (t1.stock <= t1.inv_min, 0, 1) AS status,
+    (SELECT precio FROM plataforma_ventas_temp WHERE id_syscom = t1.id_syscom AND fecha < t1.fecha ORDER BY fecha DESC LIMIT 1) AS precio_hoy,
+    t1.precio -(SELECT precio FROM plataforma_ventas_temp WHERE id_syscom = t1.id_syscom AND fecha < t1.fecha ORDER BY fecha DESC LIMIT 1) AS diferencia
 FROM (
-SELECT 
-    status, 
-    id_syscom, 
-    titulo, 
-    stock, 
-    inv_min, 
-    fecha, 
-    precio, 
-    orden,
-    ROW_NUMBER() OVER (PARTITION BY id_syscom ORDER BY fecha DESC) AS rn
-FROM plataforma_ventas_temp
+    SELECT 
+        status, 
+        id_syscom, 
+        titulo, 
+        stock, 
+        inv_min, 
+        fecha, 
+        precio, 
+        orden,
+        ROW_NUMBER() OVER (PARTITION BY id_syscom ORDER BY fecha DESC) AS rn
+    FROM plataforma_ventas_temp
 ) AS t1
 WHERE t1.rn = 1
 ORDER BY t1.orden;
@@ -55,6 +56,8 @@ if ($result->num_rows > 0) {
             <th>STATUS</th>
             <th>PRECIO AYER</th>
             <th>PRECIO HOY</th>
+            <th>DIFERENCIA</th>
+
         </tr>";
     
 
@@ -83,6 +86,8 @@ if ($result->num_rows > 0) {
             
             echo "<td><center>" . $row['precio_ayer'] . "</td></center>";
             echo "<td><center>" . $row['precio_hoy'] . "</td><center>";
+            echo "<td><center>" . $row['diferencia'] . "</td><center>";
+
 
         echo "</tr>";
     }
