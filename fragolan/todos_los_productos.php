@@ -3,33 +3,32 @@ require_once('conexion.php');
 
 $sql = "
 
-SELECT 
-    t1.orden,
-    t1.fecha,
-    t1.id_syscom, 
-    t1.titulo,
-    t1.stock, 
-    t1.inv_min, 
-    t1.status, 
-    t1.precio AS precio_ayer,
-    IF (t1.stock <= t1.inv_min, 0, 1) AS status,
-    (SELECT precio FROM plataforma_ventas_temp WHERE id_syscom = t1.id_syscom AND fecha < t1.fecha ORDER BY fecha DESC LIMIT 1) AS precio_hoy,
-    t1.precio -(SELECT precio FROM plataforma_ventas_temp WHERE id_syscom = t1.id_syscom AND fecha < t1.fecha ORDER BY fecha DESC LIMIT 1) AS diferencia
-FROM (
-    SELECT 
-        status, 
-        id_syscom, 
-        titulo, 
-        stock, 
-        inv_min, 
-        fecha, 
-        precio, 
-        orden,
-        ROW_NUMBER() OVER (PARTITION BY id_syscom ORDER BY fecha DESC) AS rn
-    FROM plataforma_ventas_temp
-) AS t1
-WHERE t1.rn = 1
-ORDER BY t1.orden;
+    SELECT
+        t1.orden,
+        t1.fecha,
+        t1.id_syscom,
+        t1.titulo,
+        t1.stock,
+        t1.inv_min,
+        t1.status,
+        t1.precio AS precio_hoy,
+        (SELECT precio FROM plataforma_ventas_temp WHERE id_syscom = t1.id_syscom AND fecha < t1.fecha ORDER BY fecha DESC LIMIT 1) AS precio_anterior,
+        t1.precio - COALESCE((SELECT precio FROM plataforma_ventas_temp WHERE id_syscom = t1.id_syscom AND fecha < t1.fecha ORDER BY fecha DESC LIMIT 1), 0) AS precio_difference
+    FROM (
+        SELECT
+            status,
+            id_syscom,
+            titulo,
+            stock,
+            inv_min,
+            fecha,
+            precio,
+            orden,
+            ROW_NUMBER() OVER (PARTITION BY id_syscom ORDER BY fecha DESC) AS rn
+        FROM plataforma_ventas_temp
+    ) AS t1
+    WHERE t1.rn = 1
+    ORDER BY t1.orden
 
 ";
 
@@ -84,21 +83,19 @@ if ($result->num_rows > 0) {
                 }
             "</td>";
             
-            echo "<td><center>" . $row['precio_ayer'] . "</td></center>";
+            echo "<td><center>" . $row['precio_anterior'] . "</td></center>";
             echo "<td><center>" . $row['precio_hoy'] . "</td><center>";
             
             echo "<td><center>";
 
-                if ($row['diferencia'] > $row['precio_hoy']) {
-                    echo "<b><center><font color=red> (+) AUMENTO-PRECIO </font></b></center>";
-        
-                } elseif
-                 ($row['precio_hoy'] < $row['diferencia']) {
-                    echo "<b><center><font  color=geern> (-) BAJO-PRECIO </font></b></center>";
-        
-                } else {
-                    echo "<b><center><font >  SIN CAMBIOS </font></b></center>";
+                if($row['precio_difference']<0){
+                    echo "<b><center> <font color=green>" . $row['precio_difference'] . "</font></b><center>";
+                }elseif($row['precio_difference']>0){
+                    echo "<b><center> <font color=red>" ."+". $row['precio_difference'] . "</font></b><center>";
+                }else{
+                    echo "<b><center><font >  S/C </font></b></center>";
                 }
+
             
                 "</td><center>";
 
