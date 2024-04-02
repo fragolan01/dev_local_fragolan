@@ -32,88 +32,42 @@ $sql = "
 
 ";
 
-
-
 $result = $conn->query($sql);
+
+// Crear un archivo CSV en memoria
+$output = fopen('php://temp', 'w');
+
+// Escribir los encabezados CSV
+fputcsv($output, array('ORDEN', 'FECHA', 'ID_SYSCOM', 'NOMBRE', 'STOCK', 'IN_MIN', 'STATUS', 'PRECIO_AYER', 'PRECIO_HOY', 'DIFERENCIA'));
+
 
 // Verifica si se encontraron resultados
 if ($result->num_rows > 0) {
 
-    
-    // Imprime los resultados en una tabla HTML
-    echo "<table border='1'>
-    <tr>
-    </tr>";
 
-    echo "<tr>
-            <th>ORDEN</th>
-            <th>FECHA CONSULTA</th>
-            <th>ID SYSCOM</th>
-            <th>NOMBRE</th>
-            <th>STOCK</th>
-            <th>INV. MINIMO</th>
-            <th>STATUS</th>
-            <th>PRECIO AYER</th>
-            <th>PRECIO HOY</th>
-            <th>DIFERENCIA</th>
-
-        </tr>";
-    
-
+    // Output data of each row
     while($row = $result->fetch_assoc()) {
-  
-        echo "<tr>";    
-            // Imprimir los demás datos de la fila
-            echo "<td><center>" . $row['orden'] . "</td></center>";
-            echo "<td><center>" . $row['fecha'] . "</td></center>";
-            echo "<td><center>" . $row['id_syscom'] . "</td></center>";
-            echo "<td>" . $row['titulo'] . "</td>";
-            echo "<td><center>" . $row['stock'] . "</td></center>";
-            echo "<td><center>" . $row['inv_min'] . "</td></center>";
-
-            echo "<td>"; 
-                if ($row['status'] == 1) {
-                    echo "<b><center><font color=green> ACTIVO</font></b></center>";
-        
-                } elseif ($row['status'] == 0) {
-                    echo "<b><center><font  color=red> PAUSA</font></b></center>";
-        
-                } else {
-                    echo 'Desconocido'; // Si el estado no es ni 0 ni 1
-                }
-            "</td>";
-            
-            echo "<td><center>" . $row['precio_anterior'] . "</td></center>";
-            echo "<td><center>" . $row['precio_hoy'] . "</td><center>";
-            
-            echo "<td><center>";
-
-                if($row['precio_difference']<0){
-                    echo "<b><center> <font color=green>" . $row['precio_difference'] . "</font></b><center>";
-                }elseif($row['precio_difference']>0){
-                    echo "<b><center> <font color=red>" ."+". $row['precio_difference'] . "</font></b><center>";
-                }else{
-                    echo "<b><center><font >  S/C </font></b></center>";
-                }
-
-            
-                "</td><center>";
-
-
-        echo "</tr>";
+        fputcsv($output, array($row["orden"], $row["fecha"], $row["id_syscom"], $row["titulo"], $row["stock"], $row["inv_min"], $row["status"], $row['precio_anterior'], $row['precio_hoy'], $row['precio_difference']));
     }
-    echo "</table>";
+    
     
 } else {
     // Si no se encontraron resultados, muestra un mensaje
     echo "No se encontraron resultados";
 }
 
+// Configurar cabeceras para la descarga del archivo CSV
+header('Content-Type: application/csv');
+header('Content-Disposition: attachment; filename="productos.csv"');
+
+// Volver al principio del archivo CSV
+rewind($output);
+
+// Mostrar el contenido del archivo CSV y cerrar la conexión
+fpassthru($output);
+
 // Cierra la conexión a la base de datos
 $conn->close();
 
-
-
 ?>
-
 
