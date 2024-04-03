@@ -1,6 +1,9 @@
 <?php
 require_once('conexion.php');
 
+// muestra el formato internacional para la configuración regional en_US
+setlocale(LC_MONETARY, 'en_US');
+
 $sql = "
 
     SELECT
@@ -31,8 +34,6 @@ $sql = "
     ORDER BY t1.orden
 
 ";
-
-
 
 $result = $conn->query($sql);
 
@@ -84,7 +85,8 @@ if ($result->num_rows > 0) {
             "</td>";
             
             echo "<td><center>" . $row['precio_anterior'] . "</td></center>";
-            echo "<td><center>" . $row['precio_hoy'] . "</td><center>";
+            echo "<td><center>" . $row['precio_hoy']. "</td><center>";
+            // echo money_format('%i', $row['precio_hoy']);
             
             echo "<td><center>";
 
@@ -95,10 +97,8 @@ if ($result->num_rows > 0) {
                 }else{
                     echo "<b><center><font >  S/C </font></b></center>";
                 }
-
             
                 "</td><center>";
-
 
         echo "</tr>";
     }

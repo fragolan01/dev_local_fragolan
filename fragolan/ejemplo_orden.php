@@ -1,41 +1,39 @@
 <?php
 
+// Conexion a base de datos
+require('conexion.php');
 
-$servername = "localhost"; // Servidor de base de datos
-$username = "root"; // Usuario de MySQL
-$password = ""; // Contraseña de MySQL
-$database = "fragcom_develop"; // base de datos
+// Token de autenticación
+$token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjM1NmU3OTkwNmJkYjJjYWNhYTJjMWM5MjZmZGNjM2M4ZmEzNzQ4ZGY0Y2VjZWUxOGQzMWFlY2Q3MWViODJmMjFmMWY3ZDBhMGJlZDk1NzkxIn0.eyJhdWQiOiJ5ZmQwS1g4U1REYUtPZEJ0cHB2UG4wSWVFeUdiVW1CVCIsImp0aSI6IjM1NmU3OTkwNmJkYjJjYWNhYTJjMWM5MjZmZGNjM2M4ZmEzNzQ4ZGY0Y2VjZWUxOGQzMWFlY2Q3MWViODJmMjFmMWY3ZDBhMGJlZDk1NzkxIiwiaWF0IjoxNzA2NTUxMzA3LCJuYmYiOjE3MDY1NTEzMDcsImV4cCI6MTczODA4NzMwNiwic3ViIjoiIiwic2NvcGVzIjpbXX0.jhALtrRj_tkgNVj6CZxuEAnWxG6qpUMeOrXZvRbLU7B5prHrc-zPmn4lLcaEDDgfWRTXHEyQrN1nRpO8EQLuBug1kUJm-mwCkPhFMb4U6c7u_S4O0WWB4bNrRv_CQpz1Vdvic1pIJB5PDurPrzG2KbHlzfogdeYWolCKFShqPH5eehoJ0MwJ5AlL83AqpFhqzeprjB0K9eGJMx3a5jc8fYZxQm7jgh1uNk4LfaapuMos23IWczeC_1uQ3Y1XW1yuYaHXY5f9N5RA_IfBULEQ-ya8UL7Bem1ntWRegx1oIQ2M1sGz5hsdyiepI313K61rGa9khk_wI9bmwBwHxca4X_sIMT_sdJ9yOVzgXMRFfG-QlvhNWK-4xDldbo52uYwxu094cwTFZijk9NmNQq-WfPNyHEzmBrL7lSmuPVSqokggA0LjvHPnXmYCz30NxonC-zSgVp_SEBcF7rw0qo5oKe7VDj0GmPHeNV9T1n8IfFo7LaALHfyw4KAwivecMh9XY5GC_IYBLWrjAwqystUW2uiVS660t7mDqvfKonFjgjZyVuakVU4MDBXOJEzF9FVahBUc_MqXVvWbiYWDtVCnzj6rwiaXzLplEFnH4ntsCveizJmcQCF-hPRKHKprEJQFfN7E1TK3kWM0Mfei_URjiklr1J0lR6NmsSvF-q165mE";
 
-// Conexión a la base de datos
-$conn = new mysqli($servername, $username, $password, $database);
+// Dominio
+$id_dominio=9999;
 
-// Verifica la conexión
-if ($conn->connect_error) {
-    die("Error de conexión: " . $conn->connect_error);
-}
+// Archivo .txt
+$archivo = 'lista_ids.txt';
 
+// Abrir el archivo en modo lectura
+$manejador = fopen($archivo, 'r',FILE_IGNORE_NEW_LINES);
 
 // Fecha
 date_default_timezone_set('America/Mexico_city');
 $fecha = $fecha = new DateTime();
 
-// Archivo .txt
-$archivo = 'lista_ids.txt';
-// Abrir el archivo en modo lectura
- $manejador = fopen($archivo, 'r',FILE_IGNORE_NEW_LINES);
-// Dolar
-$dolar = 0.0;
-
-$id_dominio=9999;
-
-
 // Establece el límite de tiempo a 300 segundos (5 minutos)
 set_time_limit(300); 
 
-// Token de autenticación
-$token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjM1NmU3OTkwNmJkYjJjYWNhYTJjMWM5MjZmZGNjM2M4ZmEzNzQ4ZGY0Y2VjZWUxOGQzMWFlY2Q3MWViODJmMjFmMWY3ZDBhMGJlZDk1NzkxIn0.eyJhdWQiOiJ5ZmQwS1g4U1REYUtPZEJ0cHB2UG4wSWVFeUdiVW1CVCIsImp0aSI6IjM1NmU3OTkwNmJkYjJjYWNhYTJjMWM5MjZmZGNjM2M4ZmEzNzQ4ZGY0Y2VjZWUxOGQzMWFlY2Q3MWViODJmMjFmMWY3ZDBhMGJlZDk1NzkxIiwiaWF0IjoxNzA2NTUxMzA3LCJuYmYiOjE3MDY1NTEzMDcsImV4cCI6MTczODA4NzMwNiwic3ViIjoiIiwic2NvcGVzIjpbXX0.jhALtrRj_tkgNVj6CZxuEAnWxG6qpUMeOrXZvRbLU7B5prHrc-zPmn4lLcaEDDgfWRTXHEyQrN1nRpO8EQLuBug1kUJm-mwCkPhFMb4U6c7u_S4O0WWB4bNrRv_CQpz1Vdvic1pIJB5PDurPrzG2KbHlzfogdeYWolCKFShqPH5eehoJ0MwJ5AlL83AqpFhqzeprjB0K9eGJMx3a5jc8fYZxQm7jgh1uNk4LfaapuMos23IWczeC_1uQ3Y1XW1yuYaHXY5f9N5RA_IfBULEQ-ya8UL7Bem1ntWRegx1oIQ2M1sGz5hsdyiepI313K61rGa9khk_wI9bmwBwHxca4X_sIMT_sdJ9yOVzgXMRFfG-QlvhNWK-4xDldbo52uYwxu094cwTFZijk9NmNQq-WfPNyHEzmBrL7lSmuPVSqokggA0LjvHPnXmYCz30NxonC-zSgVp_SEBcF7rw0qo5oKe7VDj0GmPHeNV9T1n8IfFo7LaALHfyw4KAwivecMh9XY5GC_IYBLWrjAwqystUW2uiVS660t7mDqvfKonFjgjZyVuakVU4MDBXOJEzF9FVahBUc_MqXVvWbiYWDtVCnzj6rwiaXzLplEFnH4ntsCveizJmcQCF-hPRKHKprEJQFfN7E1TK3kWM0Mfei_URjiklr1J0lR6NmsSvF-q165mE";
+// Definir la frecuencia de serie en segundos (2.5 minuto)
+$frecuencia_serie = 120; 
+
+// Dolar
+$dolar = 0.0;
+
+//Descuento
+$descuento = 0.04;
+
 // url tipo de cambio
 $tipo_de_cambio = "https://developers.syscom.mx/api/v1/tipocambio";
+
 // Configurar opciones para la solicitud HTTP
 $options = array(
     'http' => array(
@@ -67,17 +65,37 @@ if ($response === FALSE) {
     // Acceder a los datos
     echo "TIPO DE CAMBIO: ".$data['normal']."<br><br> ";
 
+    // Convertir a float decimal
+    $float_tc = floatval($data['normal']);
+
+    // Insertando datos en tabla plataforma_ventas_temp
+    $sql = "INSERT INTO plataforma_ventas_tipo_cambio (id_dominio, fecha, normal) 
+    VALUES ('$id_dominio', NOW(), '$float_tc')";
+
+    
+    if ($conn->query($sql) === TRUE) {
+        // Si la interceccion fue exitosa  
+        $conn->commit();
+    echo "Tipo de cambio insertado correctamente.";
+    } else {
+        // Si falla la inserción en plataforma_ventas_precio, hacer rollback
+        $conn->rollback();
+        echo "Error al insertar tipo de cambio plataforma_ventas_tipo_de_cambio: " . $conn->error;
+    }    
+
 }
 
 
 // Verificar si el archivo se abrió correctamente
 if ($manejador) {
+
     // Leer el archivo línea por línea
     while (($linea = fgets($manejador)) !== false) {
+
         // Dividir la línea en dos partes usando el tabulador como delimitador
         $partes = explode("\t", $linea);
         
-        // Verificar si hay dos partes (orden y producto_id)
+        // Verificar si hay tres partes (orden, producto_id)
         if (count($partes) == 3) {
             // Extraer los primeros 5 dígitos de cada número
             $orden = substr($partes[0], 0, 5);
@@ -118,7 +136,6 @@ if ($manejador) {
                     echo "Error al decodificar el JSON para el producto_id $producto_id<br>";
                 } else {
                     // Accede a los datos y muestra la información
-                    // echo 'ORDEN: '.$orden,'<br>';
                     $producto_id=$data['producto_id'];
                     $stock = ['total_existencia'];
                     $titulo =['titulo'];
@@ -130,7 +147,7 @@ if ($manejador) {
                     $int_inv_minimo = intval($ìnv_minimo); 
 
                     // Valida producto ACTIVO o en PAUSA
-                    if($int_stock < $ìnv_minimo){
+                    if($int_stock <= $ìnv_minimo){
                         $status = 0;
                         echo 'PAUSA'.'<br>';
                     }else{
@@ -138,13 +155,10 @@ if ($manejador) {
                         echo 'ACTIVO'.'<br>';
                     }
 
-    
                     echo "ID: ".$data['producto_id']."<br>";
                     echo "PRODUCTO: ".$data['titulo'].'<br>';
                     echo "STOCK: ".$data['total_existencia']."<br>";
                     echo 'INV. MINI: '.$ìnv_minimo.'<br>';
-                    
-
 
                     // ***PRECIO
                     if (isset($precio_descuento)) {
@@ -159,12 +173,15 @@ if ($manejador) {
 
 
                     //Converit a integer las varibales
-                    $int_precio_descuento = intval($precio_descuento);
+                    $float_precio_descuento = floatval($precio_descuento);
+
+                    // Calcula PRECIO con descuento
+                    $precio_con_descuento = $float_precio_descuento - ($precio_descuento * $descuento);
 
 
                     // Insertando datos
                     $sql = "INSERT INTO plataforma_ventas_temp (id_dominio, id_syscom, orden, fecha, stock, precio, inv_min, status, titulo) 
-                    VALUES ('$id_dominio', '$int_producto_id', '$int_orden', NOW(), '$int_stock','$int_precio_descuento','$int_inv_minimo', '$status', '$data_text')";
+                    VALUES ('$id_dominio', '$int_producto_id', '$int_orden', NOW(), '$int_stock','$precio_con_descuento','$int_inv_minimo', '$status', '$data_text')";
             
 
                     if ($conn->query($sql) === TRUE) {

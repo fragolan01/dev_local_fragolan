@@ -37,7 +37,7 @@
         }
     </style>
 </head>
-<h1><center>CONSULTA PRODUCTOS SYSCOM</center></h1>
+<h1><center>CONSULTA PRODUCTOS SYSCOM LOCAL</center></h1>
 <body>
 
 <?php

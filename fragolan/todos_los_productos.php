@@ -34,6 +34,9 @@ $sql = "
 
 $result = $conn->query($sql);
 
+// Obtener la fecha actual
+$currentDate = date('Y-m-d');
+
 // Crear un archivo CSV en memoria
 $output = fopen('php://temp', 'w');
 
@@ -58,7 +61,8 @@ if ($result->num_rows > 0) {
 
 // Configurar cabeceras para la descarga del archivo CSV
 header('Content-Type: application/csv');
-header('Content-Disposition: attachment; filename="productos.csv"');
+header('Content-Disposition: attachment; filename="productos_' . $currentDate . '.csv"');
+// header('Content-Disposition: attachment; filename="productos.csv"');
 
 // Volver al principio del archivo CSV
 rewind($output);
