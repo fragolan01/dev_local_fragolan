@@ -92,17 +92,21 @@ if ($manejador) {
     // Leer el archivo línea por línea
     while (($linea = fgets($manejador)) !== false) {
 
-        // Dividir la línea en dos partes usando el tabulador como delimitador
+        // Dividir la línea en cuatro partes usando el tabulador como delimitador
         $partes = explode("\t", $linea);
         
-        // Verificar si hay tres partes (orden, producto_id)
-        if (count($partes) == 3) {
-            // Extraer los primeros 5 dígitos de cada número
-            $orden = substr($partes[0], 0, 5);
-            // $producto_id = substr($partes[1], 0, 6);
-            $producto_id = trim($partes[1]);
-            $ìnv_minimo = trim($partes[2]);
+        // Verificar si hay 4 partes
+        if (count($partes) == 4) {
 
+            // Extraer los primeros 5 dígitos de cada número
+            // Orden
+            $orden = substr($partes[0], 0, 5);
+            // ID syscom
+            $producto_id = trim($partes[1]);
+            // Inventario minimo
+            $ìnv_minimo = trim($partes[2]);
+            // Total de venta mxn
+            $tot_venta_mxn = trim($partes[3]);
            
             // Construye la URL de la API con el producto_id actual
             $api_url = "https://developers.syscom.mx/api/v1/productos/".$producto_id;
@@ -159,11 +163,11 @@ if ($manejador) {
                     echo "PRODUCTO: ".$data['titulo'].'<br>';
                     echo "STOCK: ".$data['total_existencia']."<br>";
                     echo 'INV. MINI: '.$ìnv_minimo.'<br>';
+                    echo 'TOT VTA MXN: '. $tot_venta_mxn.'<br>';
 
                     // ***PRECIO
                     if (isset($precio_descuento)) {
                         echo "PRECIO: " . $precio_descuento.'<br>';
-                        // echo $fecha->format('Y-m-d H:i:s');
                         echo "<br>";
 
                     }
@@ -171,17 +175,16 @@ if ($manejador) {
                     // Convertir a texto Titulo
                     $data_text = $data['titulo'];
 
-
-                    //Converit a integer las varibales
+                    //Converit a float las varibales
                     $float_precio_descuento = floatval($precio_descuento);
+                    $float_tot_venta_mxn = floatval($tot_venta_mxn);
 
                     // Calcula PRECIO con descuento
                     $precio_con_descuento = $float_precio_descuento - ($precio_descuento * $descuento);
 
-
                     // Insertando datos
-                    $sql = "INSERT INTO plataforma_ventas_temp (id_dominio, id_syscom, orden, fecha, stock, precio, inv_min, status, titulo) 
-                    VALUES ('$id_dominio', '$int_producto_id', '$int_orden', NOW(), '$int_stock','$precio_con_descuento','$int_inv_minimo', '$status', '$data_text')";
+                    $sql = "INSERT INTO plataforma_ventas_temp (id_dominio, id_syscom, orden, fecha, stock, precio, inv_min, status, titulo, mxn_tot_venta) 
+                    VALUES ('$id_dominio', '$int_producto_id', '$int_orden', NOW(), '$int_stock','$precio_con_descuento','$int_inv_minimo', '$status', '$data_text', '$float_tot_venta_mxn')";
             
 
                     if ($conn->query($sql) === TRUE) {

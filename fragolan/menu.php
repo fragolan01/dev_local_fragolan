@@ -65,4 +65,10 @@
         echo '<form action="tipo_de_cambio.php" method="post">';
                 echo '<input type="submit" name="tipo_de_cambio" value="Tipo de Campio ">';
         echo '</form>';
+        echo '<br>';
+
+        echo '<form action="detalles_stock.php" method="post">';
+        echo '<input type="submit" name="detalles_stock" value="Detalle Stock">';
+        echo '</form>';
+
 ?>

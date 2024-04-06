@@ -92,3 +92,16 @@ WHERE
     AND status = 1
     AND dia = 5
     AND mes = 3;
+
+
+
+/* Seleccionando T.C fecha a ultima fecha */
+SELECT fecha, normal 
+FROM plataforma_ventas_tipo_cambio AS t1 
+WHERE t1.fecha = (
+    SELECT MAX(t1.fecha) 
+    FROM plataforma_ventas_tipo_cambio AS t1 
+);
+
+
+SELECT fecha, normal FROM plataforma_ventas_tipo_cambio;
