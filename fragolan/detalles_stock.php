@@ -28,7 +28,7 @@
         }
 
         table {
-            width: 50%;
+            width: 100%; /* Aumenta el ancho de la tabla */
             border-collapse: collapse;
             margin-top: 20px;
         }
@@ -41,6 +41,9 @@
 
         th {
             background-color: #f2f2f2;
+            position: sticky; /* Fija el encabezado */
+            top: 0; /* Asegura que el encabezado esté en la parte superior */
+            z-index: 1; /* Asegura que el encabezado esté por encima del contenido */
         }
     </style>
 
@@ -61,10 +64,7 @@ echo '<input type="submit" name="menu" value="Descarga reporte ">';
 echo '</form>';
 echo '<br>';
 
-
-
 require_once('conexion.php');
-
 
 // Dominio
 $id_dominio=9999;
@@ -104,7 +104,6 @@ $mxnTotComision = 0.0;
 $mxn_precio_ml = rand(5, 13000);
 $descuento_ml = rand(5, 0.40);
 
-
 $sql_tc = "
 SELECT fecha, normal 
 FROM plataforma_ventas_tipo_cambio AS t1 
@@ -124,7 +123,6 @@ if( $result->num_rows > 0 ){
         echo '<td>' . $row["normal"] . '</td>';
         $float_tc = floatval($row["normal"]);
         echo '<td>' . "16%" . '</td>';
-
         echo '</tr>';
     }
     echo '</table>';
@@ -135,7 +133,6 @@ if( $result->num_rows > 0 ){
 echo "<br><br>";
 
 $sql = "
-
     SELECT
         t1.orden,
         t1.fecha,
@@ -164,7 +161,6 @@ $sql = "
     ) AS t1
     WHERE t1.rn = 1
     ORDER BY t1.orden
-
 ";
 
 $result_all = $conn->query($sql);
@@ -186,8 +182,6 @@ if($result_all-> num_rows > 0){
             <th><center>COSTO (MXN)</center></th>
             <th><center> TOT VENTA (MXN)</center></th>
             <th><center> UTILIDAD (MXN)</center></th>
-
-
         </tr>';
 
     while($row = $result_all->fetch_assoc()) {
@@ -228,7 +222,6 @@ if($result_all-> num_rows > 0){
             echo "<td><center>". $costo_total_mxn = floatval($precio_total) * $float_tc ."</td></center>";
             echo "<td><center>". $mxn_tot_venta = floatval($row['mxn_tot_venta'])."</td></center>";
 
-            
             echo "<td><center>"; 
                     $utilidad = floatval($mxn_tot_venta) - floatval($costo_total_mxn);
 
@@ -243,9 +236,6 @@ if($result_all-> num_rows > 0){
             echo "</td></center>";
 
         echo"</tr>";
-
     }
 }
-
-
 ?>
