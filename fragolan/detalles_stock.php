@@ -100,9 +100,9 @@ $comisionMl = 0.19;
 // MXN TOT COMISION
 $mxnTotComision = 0.0;
 
-// Variables aleatorias
-$mxn_precio_ml = rand(5, 13000);
-$descuento_ml = rand(5, 0.40);
+// Notacion internacional USD
+setlocale(LC_MONETARY, 'en_US');
+
 
 $sql_tc = "
 SELECT fecha, normal 
@@ -216,19 +216,24 @@ if($result_all-> num_rows > 0){
                     echo "<b><center><font >  S/C </font></b></center>";
                 }
             "</td><center>";
+            $precio_iva = round(floatval($row['precio_hoy']*$iva), 2, PHP_ROUND_HALF_UP);
+            $precio_total = round(floatval($precio_iva) + floatval($row["precio_hoy"]), 2, PHP_ROUND_HALF_UP);
+            $costo_total_mxn = $precio_total * $float_tc;
 
-            echo "<td><center>". $precio_iva = floatval(round($row['precio_hoy']))*$iva."</td></center>";
-            echo "<td><center>". $precio_total = floatval($precio_iva) + floatval($row["precio_hoy"]) ."</td></center>";
-            echo "<td><center>". $costo_total_mxn = floatval($precio_total) * $float_tc ."</td></center>";
+
+            echo "<td><center>". $precio_iva ."</td></center>";
+            echo "<td><center>". $precio_total."</td></center>";
+            echo "<td><center>". round($costo_total_mxn, 2, PHP_ROUND_HALF_DOWN)."</td></center>";
             echo "<td><center>". $mxn_tot_venta = floatval($row['mxn_tot_venta'])."</td></center>";
 
             echo "<td><center>"; 
                     $utilidad = floatval($mxn_tot_venta) - floatval($costo_total_mxn);
+                    $utilidad_round = round($utilidad, 2, PHP_ROUND_HALF_UP);
 
-                    if($utilidad>0){
-                        echo "<b><center> <font color=green>" . $utilidad . "</font></b><center>";
-                    }elseif($utilidad<0){
-                        echo "<b><center> <font color=red>". $utilidad . "</font></b><center>";
+                    if($utilidad_round>0){
+                        echo "<b><center> <font color=green>" . $utilidad_round . "</font></b><center>";
+                    }elseif($utilidad_round<0){
+                        echo "<b><center> <font color=red>". $utilidad_round . "</font></b><center>";
                     }else{
                         echo "<b><center><font >  S/C </font></b></center>";
                     }
