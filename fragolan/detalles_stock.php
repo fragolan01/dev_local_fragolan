@@ -45,35 +45,47 @@
             top: 0; /* Asegura que el encabezado esté en la parte superior */
             z-index: 1; /* Asegura que el encabezado esté por encima del contenido */
         }
+
+        .input-text {
+            padding: 5px;
+            width: 100px;
+        }
     </style>
 
 </head>
 <h1><center>DETALLE PRODUCTOS SYSCOM</center></h1>
 <body>
     
+    <!-- <form action="menu.php" method="post">
+        <input type="text" name="float_tc" class="input-text" placeholder="T.C.">
+        <input type="submit" name="menu" value="inicio">
+    </form> -->
+    <form action="menu.php" method="post">
+        <input type="submit" name="menu" value="Inicio">
+    </form>
+    <br>
+
 </body>
 </html>
 
 <?php
 
-echo '<form action="menu.php" method="post">';
-echo '<input type="submit" name="menu" value="inicio ">';
-echo "\t";
-echo '<form action="menu.php" method="post">';
-echo '<input type="submit" name="menu" value="Descarga reporte ">';
-echo '</form>';
-echo '<br>';
-
 require_once('conexion.php');
 
+if(isset($_POST['float_tc'])) {
+    $float_tc = floatval($_POST['float_tc']);
+} else {
+    $float_tc = 0.0;
+}
+
 // Dominio
-$id_dominio=9999;
+$id_dominio = 9999;
 
 // Archivo .txt
 $archivo = 'lista_ids.txt';
 
 // Abrir el archivo en modo lectura
-$manejador = fopen($archivo, 'r',FILE_IGNORE_NEW_LINES);
+$manejador = fopen($archivo, 'r', FILE_IGNORE_NEW_LINES);
 
 // Fecha
 date_default_timezone_set('America/Mexico_city');
@@ -88,21 +100,11 @@ $frecuencia_serie = 120;
 // Dolar
 $dolar = 0.0;
 
-//Descuento
+// Descuento
 $descuento = 0.04;
 
-//IVA
+// IVA
 $iva = 0.16;
-
-// Comision ML
-$comisionMl = 0.19;
-
-// MXN TOT COMISION
-$mxnTotComision = 0.0;
-
-// Notacion internacional USD
-setlocale(LC_MONETARY, 'en_US');
-
 
 $sql_tc = "
 SELECT fecha, normal 
@@ -114,21 +116,40 @@ WHERE t1.fecha = (
 
 $result = $conn->query($sql_tc);
 
-if( $result->num_rows > 0 ){
+if($result->num_rows > 0) {
     echo '<table>';
-    echo '<tr><th>Fecha Consulta</th><th>T.C</th><th>IVA</th></tr>';
-    while($row = $result->fetch_assoc()){
+    echo '<tr><th>Fecha Consulta</th><th>T.C SYSCOM</th> <th>ACTUALIZA T.C</th> <th>IVA</th></tr>';
+    while($row = $result->fetch_assoc()) {
         echo '<tr>';
-        echo '<td>' . $row["fecha"] . '</td>';
-        echo '<td>' . $row["normal"] . '</td>';
-        $float_tc = floatval($row["normal"]);
-        echo '<td>' . "16%" . '</td>';
+            echo '<td>' . $row["fecha"] . '</td>';
+            echo '<td>' . $row["normal"] . '</td>';
+            // echo '<form action="menu.php" method="post">';
+
+            echo '<td>';
+                echo '<center>';
+                echo '<form action="detalles_stock.php" method="post">';
+                echo '<input type="submit" name="update_tc" value="Actualizar T.C.">  ';
+                echo'<input type="text" name="float_tc" class="input-text" placeholder="T.C." value="' . ($row["normal"] ?? 0.0) . '">';
+                echo '</center>';
+            echo '</td>';
+
+            $float_tc = floatval($row["normal"]);
+            echo '<td>' . "16%" . '</td>';
         echo '</tr>';
     }
-    echo '</table>';
 } else {
     echo "No se encontraron resultados";
 }
+
+
+// Check if the update_tc button was clicked
+if (isset($_POST['update_tc'])) {
+    // Update the value of $float_tc
+    $float_tc = floatval($_POST['float_tc']);
+    // Do something with the updated value
+    // ...
+}
+
 
 echo "<br><br>";
 
@@ -165,13 +186,13 @@ $sql = "
 
 $result_all = $conn->query($sql);
 
-if($result_all-> num_rows > 0){
+if($result_all->num_rows > 0) {
     echo '<table>';
     echo '<tr>
             <th><center>ORDEN</center></th>
             <th><center>ID_SYSCOM</center></th>
             <th><center>NOMBRE</center></th>
-            <th><centr>STOCK</center></th>
+            <th><center>STOCK</center></th>
             <th><center>INV. MINIMO</center></th>
             <th><center>STATUS</center></th>
             <th><center>PRECIO AYER (USD)</center></th>
@@ -195,31 +216,29 @@ if($result_all-> num_rows > 0){
             echo "<td>"; 
             if ($row['status'] == 1) {
                 echo "<b><center><font color=green> ACTIVO</font></b></center>";
-    
             } elseif ($row['status'] == 0) {
-                echo "<b><center><font  color=red> PAUSA</font></b></center>";
-    
+                echo "<b><center><font color=red> PAUSA</font></b></center>";
             } else {
                 echo 'Desconocido'; // Si el estado no es ni 0 ni 1
             }
-            "</td>";
+            echo "</td>";
 
             echo "<td><center>" . $row['precio_anterior'] . "</td></center>";
             echo "<td><center>" . $row['precio_hoy']. "</td><center>";
 
             echo "<td><center>";
-                if($row['precio_difference']<0){
-                    echo "<b><center> <font color=green>" . $row['precio_difference'] . "</font></b><center>";
-                }elseif($row['precio_difference']>0){
-                    echo "<b><center> <font color=red>" ."+". $row['precio_difference'] . "</font></b><center>";
-                }else{
-                    echo "<b><center><font >  S/C </font></b></center>";
-                }
-            "</td><center>";
-            $precio_iva = round(floatval($row['precio_hoy']*$iva), 2, PHP_ROUND_HALF_UP);
+            if($row['precio_difference'] < 0) {
+                echo "<b><center> <font color=green>" . $row['precio_difference'] . "</font></b><center>";
+            } elseif($row['precio_difference'] > 0) {
+                echo "<b><center> <font color=red>" ."+". $row['precio_difference'] . "</font></b><center>";
+            } else {
+                echo "<b><center><font >  S/C </font></b></center>";
+            }
+            echo "</td><center>";
+
+            $precio_iva = round(floatval($row['precio_hoy'] * $iva), 2, PHP_ROUND_HALF_UP);
             $precio_total = round(floatval($precio_iva) + floatval($row["precio_hoy"]), 2, PHP_ROUND_HALF_UP);
             $costo_total_mxn = $precio_total * $float_tc;
-
 
             echo "<td><center>". $precio_iva ."</td></center>";
             echo "<td><center>". $precio_total."</td></center>";
@@ -227,20 +246,21 @@ if($result_all-> num_rows > 0){
             echo "<td><center>". $mxn_tot_venta = floatval($row['mxn_tot_venta'])."</td></center>";
 
             echo "<td><center>"; 
-                    $utilidad = floatval($mxn_tot_venta) - floatval($costo_total_mxn);
-                    $utilidad_round = round($utilidad, 2, PHP_ROUND_HALF_UP);
+            $utilidad = floatval($mxn_tot_venta) - floatval($costo_total_mxn);
+            $utilidad_round = round($utilidad, 2, PHP_ROUND_HALF_UP);
 
-                    if($utilidad_round>0){
-                        echo "<b><center> <font color=green>" . $utilidad_round . "</font></b><center>";
-                    }elseif($utilidad_round<0){
-                        echo "<b><center> <font color=red>". $utilidad_round . "</font></b><center>";
-                    }else{
-                        echo "<b><center><font >  S/C </font></b></center>";
-                    }
+            if($utilidad_round > 0) {
+                echo "<b><center> <font color=green>" . $utilidad_round . "</font></b><center>";
+            } elseif($utilidad_round < 0) {
+                echo "<b><center> <font color=red>". $utilidad_round . "</font></b><center>";
+            } else {
+                echo "<b><center><font >  S/C </font></b></center>";
+            }
         
             echo "</td></center>";
 
-        echo"</tr>";
+        echo "</tr>";
     }
 }
+
 ?>

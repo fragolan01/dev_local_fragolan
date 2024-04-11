@@ -48,7 +48,7 @@
         // echo '<br>';
 
         echo '<form action="todos_los_productos.php" method="post">';
-                echo '<input type="submit" name="productos_btn" value="Descarga .CSV ">';
+                echo '<input type="submit" name="productos_btn" value="Descarga.CSV ">';
         echo '</form>';
         echo '<br>';
 

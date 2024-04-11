@@ -8,7 +8,12 @@ ALTER TABLE plataforma_ventas_precio MODIFY COLUMN precio  DOUBLE;
 ALTER TABLE plataforma_ventas_tipo_cambio MODIFY fecha timestamp NOT NULL;
 ALTER TABLE plataforma_ventas_tipo_cambio MODIFY COLUMN normal  DEC(5,2);
 
-ALTER TABLE plataforma_ventas_temp ADD COLUMN mxn_tot_venta DEC(10,2);
+ALTER TABLE plataforma_ventas_temp ADD COLUMN mxn_tot_venta DEC(10,10);
+/* DELETE */
+ALTER TABLE plataforma_ventas_temp DROP COLUMN mxn_tot_venta;
+/* ADD COLUMN  */
+ALTER TABLE plataforma_ventas_temp ADD COLUMN mxn_tot_venta DEC(10,6);
+
 
 
 
