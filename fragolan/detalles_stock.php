@@ -135,20 +135,27 @@ if($result->num_rows > 0) {
     echo "No se encontraron resultados";
 }
 
-$tc_especial = 0.0;
+$tc_especial = $float_tc;
 $costo_total_mxn = 0.0;
 
 // Check if the update_tc button was clicked
 if (isset($_POST['update_tc'])) {
     // Update the value of $float_tc
     $tc_especial = floatval($_POST['float_tc']);
-
 }
 
-echo "Tipo de Cambio utilizado: ".$tc_especial;
+
+if ($tc_especial < $float_tc ) {
+
+        echo '<table><tr><td>'.'<center>'."El TC ES MENOR A: ". $float_tc. '<center>'.'</td></tr></table>' ;
+
+}elseif ($tc_especial != $float_tc){
+
+    echo '<table><tr><td>'.'<center>'."El TC UTILIZADO ES : ". $float_tc. '<center>'.'</td></tr></table>' ;
+}
+
 
 echo "<br><br>";
-
 $sql = "
     SELECT
         t1.orden,
