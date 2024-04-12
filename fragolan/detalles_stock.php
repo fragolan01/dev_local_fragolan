@@ -146,12 +146,9 @@ if (isset($_POST['update_tc'])) {
 
 
 if ($tc_especial < $float_tc ) {
-
-        echo '<table><tr><td>'.'<center>'."El TC ES MENOR A: ". $float_tc. '<center>'.'</td></tr></table>' ;
-
-}elseif ($tc_especial != $float_tc){
-
-    echo '<table><tr><td>'.'<center>'."El TC UTILIZADO ES : ". $float_tc. '<center>'.'</td></tr></table>' ;
+    echo '<table><tr><td style="background-color: #FF0000; color: #FFFFFF; font-black: bold; text-align: center;">El TC ES MENOR A: ' . $float_tc . '</td></tr></table>';
+} elseif ($tc_especial != $float_tc) {
+    echo '<table><tr><td style="background-color: #00FF00; color: #000000; font-weight: bold; text-align: center;">El TC UTILIZADO ES : ' . $tc_especial . '</td></tr></table>';
 }
 
 
