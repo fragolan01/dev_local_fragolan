@@ -223,14 +223,14 @@ if($result_all->num_rows > 0) {
             }
             echo "</td>";
 
-            echo "<td><center>" . $row['precio_anterior'] . "</td></center>";
-            echo "<td><center>" . $row['precio_hoy']. "</td><center>";
+            echo "<td><center>$" . $row['precio_anterior'] . "</td></center>";
+            echo "<td><center>$" . $row['precio_hoy']. "</td><center>";
 
             echo "<td><center>";
             if($row['precio_difference'] < 0) {
-                echo "<b><center> <font color=green>" . $row['precio_difference'] . "</font></b><center>";
+                echo "<b><center> <font color=green>" ."$". $row['precio_difference'] . "</font></b><center>";
             } elseif($row['precio_difference'] > 0) {
-                echo "<b><center> <font color=red>" ."+". $row['precio_difference'] . "</font></b><center>";
+                echo "<b><center> <font color=red>" ."+". "$".$row['precio_difference'] . "</font></b><center>";
             } else {
                 echo "<b><center><font >  S/C </font></b></center>";
             }
@@ -240,19 +240,20 @@ if($result_all->num_rows > 0) {
             $precio_total = round(floatval($precio_iva) + floatval($row["precio_hoy"]), 2, PHP_ROUND_HALF_UP);
             $costo_total_mxn = $precio_total * $float_tc;
 
-            echo "<td><center>". $precio_iva ."</td></center>";
-            echo "<td><center>". $precio_total."</td></center>";
-            echo "<td><center>". round($costo_total_mxn, 2, PHP_ROUND_HALF_DOWN)."</td></center>";
-            echo "<td><center>". $mxn_tot_venta = floatval($row['mxn_tot_venta'])."</td></center>";
+            echo "<td><center>$". $precio_iva ."</td></center>";
+            echo "<td><center>$". $precio_total."</td></center>";
+            echo "<td><center>$". round($costo_total_mxn, 2, PHP_ROUND_HALF_DOWN)."</td></center>";
+            echo "<td><center>$". $mxn_tot_venta = floatval($row['mxn_tot_venta'])."</td></center>";
 
             echo "<td><center>"; 
             $utilidad = floatval($mxn_tot_venta) - floatval($costo_total_mxn);
             $utilidad_round = round($utilidad, 2, PHP_ROUND_HALF_UP);
 
             if($utilidad_round > 0) {
-                echo "<b><center> <font color=green>" . $utilidad_round . "</font></b><center>";
+                echo "<b><center> <font color=green>"."$" . $utilidad_round . "</font></b><center>";
             } elseif($utilidad_round < 0) {
-                echo "<b><center> <font color=red>". $utilidad_round . "</font></b><center>";
+                $utilidad_round = sprintf("$%.2f", $utilidad_round); 
+                echo "<b><center> <font color=red>". $utilidad_round ."</font></b><center>";
             } else {
                 echo "<b><center><font >  S/C </font></b></center>";
             }

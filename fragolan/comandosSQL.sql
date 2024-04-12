@@ -3,7 +3,9 @@ ALTER TABLE plataforma_ventas_precio DROP COLUMN id_producto;
 ALTER TABLE plataforma_ventas_temp add COLUMN id_syscom int;
 ALTER TABLE plataforma_ventas_temp MODIFY COLUMN fecha timestamp;
 ALTER TABLE plataforma_ventas_precio MODIFY fecha timestamp NOT NULL;
+
 ALTER TABLE plataforma_ventas_temp MODIFY COLUMN precio  DEC(10,2);
+
 ALTER TABLE plataforma_ventas_precio MODIFY COLUMN precio  DOUBLE;
 ALTER TABLE plataforma_ventas_tipo_cambio MODIFY fecha timestamp NOT NULL;
 ALTER TABLE plataforma_ventas_tipo_cambio MODIFY COLUMN normal  DEC(5,2);
