@@ -72,12 +72,6 @@
 
 require_once('conexion.php');
 
-if(isset($_POST['float_tc'])) {
-    $float_tc = floatval($_POST['float_tc']);
-} else {
-    $float_tc = 0.0;
-}
-
 // Dominio
 $id_dominio = 9999;
 
@@ -113,23 +107,23 @@ WHERE t1.fecha = (
     SELECT MAX(t1.fecha) 
     FROM plataforma_ventas_tipo_cambio AS t1)
 ";
-
 $result = $conn->query($sql_tc);
+
+$fechaConsulta = date("d-m-Y"); // Obtener la fecha actual en formato YYYY-MM-DD
 
 if($result->num_rows > 0) {
     echo '<table>';
-    echo '<tr><th>Fecha Consulta</th><th>T.C SYSCOM</th> <th>ACTUALIZA T.C</th> <th>IVA</th></tr>';
+    echo '<tr><th>FECHA CONSULTA</th><th> T.C HOY '.  $fechaConsulta.  '</th> <th>ACTUALIZA T.C</th> <th>IVA</th></tr>';
     while($row = $result->fetch_assoc()) {
         echo '<tr>';
             echo '<td>' . $row["fecha"] . '</td>';
             echo '<td>' . $row["normal"] . '</td>';
-            // echo '<form action="menu.php" method="post">';
 
             echo '<td>';
                 echo '<center>';
                 echo '<form action="detalles_stock.php" method="post">';
-                echo '<input type="submit" name="update_tc" value="Actualizar T.C.">  ';
-                echo'<input type="text" name="float_tc" class="input-text" placeholder="T.C." value="' . ($row["normal"] ?? 0.0) . '">';
+                echo '<input type="submit" name="update_tc" value="Modifica T.C. ">  ';
+                echo'<input type="text" name="float_tc" class="input-text" placeholder="T.C." value="' . ($row["normal"]?? 0.0) . '">';
                 echo '</center>';
             echo '</td>';
 
@@ -141,15 +135,17 @@ if($result->num_rows > 0) {
     echo "No se encontraron resultados";
 }
 
+$tc_especial = 0.0;
+$costo_total_mxn = 0.0;
 
 // Check if the update_tc button was clicked
 if (isset($_POST['update_tc'])) {
     // Update the value of $float_tc
-    $float_tc = floatval($_POST['float_tc']);
-    // Do something with the updated value
-    // ...
+    $tc_especial = floatval($_POST['float_tc']);
+
 }
 
+echo "Tipo de Cambio utilizado: ".$tc_especial;
 
 echo "<br><br>";
 
@@ -239,6 +235,14 @@ if($result_all->num_rows > 0) {
             $precio_iva = round(floatval($row['precio_hoy'] * $iva), 2, PHP_ROUND_HALF_UP);
             $precio_total = round(floatval($precio_iva) + floatval($row["precio_hoy"]), 2, PHP_ROUND_HALF_UP);
             $costo_total_mxn = $precio_total * $float_tc;
+            
+            // Check if the update_tc button was clicked
+            if (isset($_POST['update_tc'])) {
+                // Update the value of $float_tc
+                $tc_especial = floatval($_POST['float_tc']);
+                $costo_total_mxn = $precio_total * $tc_especial;
+
+            }
 
             echo "<td><center>$". $precio_iva ."</td></center>";
             echo "<td><center>$". $precio_total."</td></center>";
