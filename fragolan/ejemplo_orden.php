@@ -197,7 +197,7 @@ if ($manejador) {
                 }
             
         } else {
-        //     // Si la línea no tiene tres partes, mostrar un mensaje de error
+            // Si la línea no tiene tres partes, mostrar un mensaje de error
             echo "Error: La línea no tiene el formato esperado.\n";
         }
     }

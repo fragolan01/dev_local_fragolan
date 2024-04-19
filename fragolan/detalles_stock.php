@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
+<link rel="stylesheet" href="lib/bootstrap.min.css">
+<script src="lib/jquery.js"></script>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +15,6 @@
             display: inline-block;
             margin-bottom: 10px;
         }
-
         input[type="submit"] {
             padding: 10px 20px;
             font-size: 16px;
@@ -60,17 +63,52 @@
         <input type="text" name="float_tc" class="input-text" placeholder="T.C.">
         <input type="submit" name="menu" value="inicio">
     </form> -->
+
     <form action="menu.php" method="post">
         <input type="submit" name="menu" value="Inicio">
     </form>
     <br>
+
+    <!-- Buscador -->
+
+    <div class="container">
+    <div class="page-header text-left">
+    </div>
+    <div class="row">
+      <div class="col-md-3 mx-auto">
+        <div class="input-group">
+          <span class="input-group-addon"><span class="glyphicon glyphicon glyphicon-search" aria-hidden="true"></span></span>
+          <input type="text" class="form-control" id="search" placeholder="ID Syscom">
+        </div>
+      </div>
+      <div class="container">
+        <h1 class="row">
+          <div class="col-md-9" id="result">
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+    </script>
+    <script type="text/javascript" src="js/index.js"></script>
+
+
+
+
 
 </body>
 </html>
 
 <?php
 
-require_once('conexion.php');
+
+
+// require_once('conexion.php');
+
+include_once('conexion.php');
+
+
 
 // Dominio
 $id_dominio = 9999;
@@ -110,7 +148,6 @@ WHERE t1.fecha = (
 $result = $conn->query($sql_tc);
 
 $fechaConsulta = date("d-m-Y"); // Obtener la fecha actual en formato YYYY-MM-DD
-
 if($result->num_rows > 0) {
     echo '<table>';
     echo '<tr><th>FECHA CONSULTA</th><th> T.C HOY '.  $fechaConsulta.  '</th> <th>ACTUALIZA T.C</th> <th>IVA</th></tr>';
@@ -119,9 +156,9 @@ if($result->num_rows > 0) {
             echo '<td>' . $row["fecha"] . '</td>';
             echo '<td>' . $row["normal"] . '</td>';
 
-            echo '<td>';
+            echo '</th><td>';
                 echo '<center>';
-                echo '<form action="detalles_stock.php" method="post">';
+                echo '<form name="detalles_stock" acction="detalles_stock" method="post">';
                 echo '<input type="submit" name="update_tc" value="Modifica T.C. ">  ';
                 echo'<input type="text" name="float_tc" class="input-text" placeholder="T.C." value="' . ($row["normal"]?? 0.0) . '">';
                 echo '</center>';
@@ -129,7 +166,7 @@ if($result->num_rows > 0) {
 
             $float_tc = floatval($row["normal"]);
             echo '<td>' . "16%" . '</td>';
-        echo '</tr>';
+        echo '</th></tr>';
     }
 } else {
     echo "No se encontraron resultados";
@@ -144,12 +181,12 @@ if (isset($_POST['update_tc'])) {
     $tc_especial = floatval($_POST['float_tc']);
 }
 
-
 if ($tc_especial < $float_tc ) {
     echo '<table><tr><td style="background-color: #FF0000; color: #FFFFFF; font-black: bold; text-align: center;">El TC ES MENOR A: ' . $float_tc . '</td></tr></table>';
 } elseif ($tc_especial != $float_tc) {
     echo '<table><tr><td style="background-color: #00FF00; color: #000000; font-weight: bold; text-align: center;">El TC UTILIZADO ES : ' . $tc_especial . '</td></tr></table>';
 }
+
 
 
 echo "<br><br>";
@@ -245,7 +282,6 @@ if($result_all->num_rows > 0) {
                 // Update the value of $float_tc
                 $tc_especial = floatval($_POST['float_tc']);
                 $costo_total_mxn = $precio_total * $tc_especial;
-
             }
 
             echo "<td><center>$". $precio_iva ."</td></center>";
@@ -265,9 +301,7 @@ if($result_all->num_rows > 0) {
             } else {
                 echo "<b><center><font >  S/C </font></b></center>";
             }
-        
             echo "</td></center>";
-
         echo "</tr>";
     }
 }
